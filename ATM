@@ -1,0 +1,129 @@
+package atm;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+
+public class ATM extends JFrame 
+{
+	private JPasswordField passwordField;
+	final String CORRECT_PIN = "1234";
+	public int incorrectInput;
+
+	public ATM() 
+	{
+		JFrame frame = new JFrame("ATM PIN AUTHENTICATION.");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(new BorderLayout());
+
+		passwordField = new JPasswordField(10);
+		passwordField.setActionCommand("ENTER");
+
+		JButton button1 = new JButton("1");
+		JButton button2 = new JButton("2");
+		JButton button3 = new JButton("3");
+		JButton button4 = new JButton("4");
+		JButton button5 = new JButton("5");
+		JButton button6 = new JButton("6");
+		JButton button7 = new JButton("7");
+		JButton button8 = new JButton("8");
+		JButton button9 = new JButton("9");
+		JButton button0 = new JButton("0");
+		JButton Enterbutton = new JButton("ENTER");
+		JButton Clearbutton = new JButton("CLEAR");
+
+		button1.addActionListener(new Buttonaction());
+		button2.addActionListener(new Buttonaction());
+		button3.addActionListener(new Buttonaction());
+		button4.addActionListener(new Buttonaction());
+		button5.addActionListener(new Buttonaction());
+		button6.addActionListener(new Buttonaction());
+		button7.addActionListener(new Buttonaction());
+		button8.addActionListener(new Buttonaction());
+		button9.addActionListener(new Buttonaction());
+		button0.addActionListener(new Buttonaction());
+		Enterbutton.addActionListener(new EnterAction());
+		Clearbutton.addActionListener(new ClearAction());
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(5, 4));
+		panel.add(button1);
+		panel.add(button2);
+		panel.add(button3);
+		panel.add(button4);
+		panel.add(button5);
+		panel.add(button6);
+		panel.add(button7);
+		panel.add(button8);
+		panel.add(button9);
+		panel.add(button0);
+		panel.add(Enterbutton);
+		panel.add(Clearbutton);
+
+		frame.add(panel, BorderLayout.SOUTH);
+		frame.add(passwordField, BorderLayout.NORTH);
+		frame.setSize(800, 600);
+		frame.pack();
+		frame.setVisible(true);
+	}
+	private class Buttonaction implements ActionListener 
+	{
+		public void actionPerformed(ActionEvent event) 
+		{
+			String action = event.getActionCommand();
+
+			char[] str = passwordField.getPassword();
+			String str1 = String.valueOf(str);
+			str1 += action;
+			passwordField.setText(str1);
+		}
+	}
+	private class ClearAction implements ActionListener 
+	{
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			passwordField.setText("");
+		}
+	}
+	private class EnterAction implements ActionListener 
+	{
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			char[] password = passwordField.getPassword();
+			String valuePassword = String.valueOf(password);
+			if (CORRECT_PIN.equals(valuePassword)) 
+			{
+				JOptionPane.showMessageDialog(null, "Welcome Customer");
+			} 
+			else 
+			{
+				incorrectInput++;
+				if(incorrectInput > 3)
+				{
+					JOptionPane.showMessageDialog(null, "Your account has been blocked. Please contact an administrator.");
+
+				}
+				Object[] object = { passwordField };
+				int rlt = JOptionPane.showConfirmDialog(null, object, "Please re-enter correct password", JOptionPane.OK_CANCEL_OPTION);
+				if (rlt == JOptionPane.OK_OPTION) 
+				{
+					char[] pwd = passwordField.getPassword();
+					String valuePWD = String.valueOf(pwd);
+					passwordField.setText("");
+					passwordField.setText(valuePWD);
+				}
+			}
+		}
+	}
+	public static void main(String args[]) 
+	{
+		ATM atm = new ATM();
+	}
+}
